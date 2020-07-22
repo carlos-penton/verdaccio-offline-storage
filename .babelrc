@@ -1,3 +1,10 @@
 {
-  "presets": ["@verdaccio", {typescript: false} ]
+  "presets": [
+    [
+      "@verdaccio",
+      {
+        "typescript": false
+      }
+    ]
+  ]
 }

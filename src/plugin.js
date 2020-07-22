@@ -1,106 +1,27 @@
-import PackageStorage from './PackageStorage';
+import LocalDatabase from '@verdaccio/local-storage';
 
-class VerdaccioStoragePlugin {
+export default class OfflineStorage extends LocalDatabase {
   constructor(config, options) {
-    this.config = config;
-    this.logger = options.logger;
-  }
-
-  async getSecret() {
-     /**
-     * return await resolveSecret();
-     */
-  }
-
-  async setSecret(secret) {
-     /**
-     * return await getYourSecret();
-     */
+    super(config, options.logger);
   }
 
   /**
-   * Add a new element.
-   * @param {*} name
-   * @return {Error|*}
-   */
-  add(name, cb) {}
-
-  search(onPackage, onEnd, validateName) {
-     /**
-     * Example of implementation:
-     * try {
-     *  someApi.getPackages((items) => {
-     *   items.map(() => {
-     *     if (validateName(item.name)) {
-     *       onPackage(item);
-     *     }
-     *   });
-     *  onEnd();
-     * } catch(err) {
-     *   onEnd(err);
-     * }
-     * });
-     */
-  }
-
-  /**
-   * Remove an element from the database.
-   * @param {*} name
-   * @return {Error|*}
-   */
-  remove(name, callback) {
-     /**
-     * Example of implementation
-      database.getPackage(name, (item, err) => {
-        if (err) {
-          callback(getInternalError('your own message here'));
-        }
-
-        // if all goes well we return nothing
-        callback(null);
-      }
-    */
-  }
-
-  /**
-   * Return all database elements.
-   * @return {Array}
+   * Return all packages in the local cache.
+   *
+   * @param callback: The callback to invoke with the found packages name.
    */
   get(callback) {
-      /*
-      Example of implementation
-      database.getAll((allItems, err) => {
-        callback(err, allItems);
-      })
-    */
-  }
-
-  /**
-   * Create an instance of the `PackageStorage`
-   * @param packageInfo
-   */
-  getPackageStorage(packageInfo) {
-    return new PackageStorage(this.config, packageInfo, this.logger);
-  }
-
-  /**
-   * All methods for npm token support
-   * more info here https://github.com/verdaccio/verdaccio/pull/1427
-   */
-
-  saveToken(token) {
-    throw new Error('Method not implemented.');
-  }
-
-  deleteToken(user, tokenKey) {
-    throw new Error('Method not implemented.');
-  }
-
-  readTokens(filter) {
-    throw new Error('Method not implemented.');
+    const packages = [];
+    this.search(
+      (item, cb) => {
+        packages.push(item.name);
+        cb();
+      },
+      () => {
+        this.data.list = packages;
+        callback(null, packages);
+      },
+      name => !name.startsWith('.')
+    );
   }
 }
-
-export default (config, options) => {
-  return new VerdaccioStoragePlugin(config, options);
-};

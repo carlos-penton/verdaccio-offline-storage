@@ -1,20 +1,25 @@
-# verdaccio-offline-cache-storage
+# verdaccio-offline-storage
 
 > Local package cache as first class citizen
 
 ---
 
-## development
+## Development
 
-See the [verdaccio contributing guide](https://github.com/verdaccio/verdaccio/blob/master/CONTRIBUTING.md) for instructions setting up your development environment. 
-Once you have completed that, use the following npm tasks.
+First, install all deps:
 
-  - `npm run build`
+```bash
+yarn
+```
+
+Then use the following npm tasks.
+
+  - `yarn build`
 
     Build a distributable archive
 
-  - `npm run test`
+  - `yarn lint`
 
-    Run unit test
+    Lint the code
 
 For more information about any of these commands run `npm run ${task} -- --help`.

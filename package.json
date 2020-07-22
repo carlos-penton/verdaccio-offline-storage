@@ -1,33 +1,34 @@
 {
-  "name": "verdaccio-offline-cache-storage",
+  "name": "verdaccio-offline-storage",
   "version": "0.0.1",
   "description": "Local package cache as first class citizen",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": ["lib/"],
+  "files": [
+    "lib/"
+  ],
   "engines": {
     "node": ">=10"
   },
   "dependencies": {
-    "@verdaccio/commons-api": "^9.6.1"
+    "@verdaccio/commons-api": "^9.6.1",
+    "@verdaccio/local-storage": "^9.7.2"
   },
   "devDependencies": {
     "@verdaccio/babel-preset": "^9.6.1",
     "@verdaccio/eslint-config": "^9.3.2",
-    "eslint": "^6.6.0",
+    "eslint": "^7.5.0",
     "jest": "^26.0.1 ",
     "prettier": "^1.19.1",
-    "standard-version": "^8.0.0"
+    "standard-version": "^8.0.0",
+    "typescript": "^3.9.7",
+    "typescript-eslint": "^0.0.1-alpha.0"
   },
-  "keywords": "[local,offline,cache,verdaccio,storage,verdaccio-]",
+  "keywords": ["local","offline","cache","verdaccio","storage","verdaccio-"],
   "license": "MIT",
-  "repository": "g3ngar/offline-cache-storage",
+  "repository": "g3ngar/offline-storage",
   "author": "g3ngar <gengar@nauta.cu>",
   "scripts": {
-    "build": "npm run build:types && npm run build:js",
-    "build:js": "babel src/ --out-dir lib --extensions \".ts,.tsx\"",
-    "build:types": "tsc --emitDeclarationOnly",
-    "test": "jest",
-    "lint": "eslint \"**/*.{js,ts}\""
+    "build": "babel src/ --out-dir lib",
+    "lint": "eslint src/"
   }
 }
