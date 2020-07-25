@@ -1,1 +1,1 @@
-export { default } from './OfflineDatabase';
+export { default } from './OfflineStoragePlugin';

@@ -1,9 +1,9 @@
 import { join } from 'path';
 import { readdir } from 'fs';
 import LocalDatabase from '@verdaccio/local-storage';
-import OfflineStorage from './OfflineStorage';
+import OfflinePackageStorage from './OfflinePackageStorage';
 
-export default class OfflineDatabase extends LocalDatabase {
+export default class OfflineStoragePlugin extends LocalDatabase {
   constructor(config, options) {
     super(config, options.logger);
   }
@@ -36,6 +36,6 @@ export default class OfflineDatabase extends LocalDatabase {
     );
   }
   getPackageStorage(packageName) {
-    return new OfflineStorage(join(this.config.storage, packageName), this.logger);
+    return new OfflinePackageStorage(join(this.config.storage, packageName), this.logger);
   }
 }

@@ -3,7 +3,7 @@ import { basename } from 'path';
 import cmp from 'semver-compare';
 import LocalFS from '@verdaccio/local-storage/lib/local-fs';
 
-export default class OfflineStorage extends LocalFS {
+export default class OfflinePackageStorage extends LocalFS {
   readPackage(name, cb) {
     super.readPackage(name, (err, data) => {
       if (err) {

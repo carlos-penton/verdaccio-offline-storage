@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Local package cache as first class citizen",
   "main": "lib/index.js",
+  "module": "src/index.js",
   "files": [
     "lib/"
   ],
@@ -37,7 +38,7 @@
   "repository": "g3ngar/offline-storage",
   "author": "g3ngar <gengar@nauta.cu>",
   "scripts": {
-    "build": "babel src/ --out-dir lib",
+    "build": "mkdir -p lib && rm -r lib && babel src/ --out-dir lib",
     "lint": "eslint src/"
   }
 }
