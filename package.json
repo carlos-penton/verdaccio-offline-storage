@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@verdaccio/commons-api": "^9.6.1",
-    "@verdaccio/local-storage": "^9.7.2"
+    "@verdaccio/local-storage": "^9.7.2",
+    "semver-compare": "^1.0.0"
   },
   "devDependencies": {
     "@verdaccio/babel-preset": "^9.6.1",
     "@verdaccio/eslint-config": "^9.3.2",
+    "@verdaccio/types": "^9.7.2",
     "eslint": "^7.5.0",
     "jest": "^26.0.1 ",
     "prettier": "^1.19.1",
@@ -23,7 +25,14 @@
     "typescript": "^3.9.7",
     "typescript-eslint": "^0.0.1-alpha.0"
   },
-  "keywords": ["local","offline","cache","verdaccio","storage","verdaccio-"],
+  "keywords": [
+    "local",
+    "offline",
+    "cache",
+    "verdaccio",
+    "storage",
+    "verdaccio-"
+  ],
   "license": "MIT",
   "repository": "g3ngar/offline-storage",
   "author": "g3ngar <gengar@nauta.cu>",
