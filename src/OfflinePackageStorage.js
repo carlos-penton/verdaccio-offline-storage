@@ -31,16 +31,16 @@ export default class OfflinePackageStorage extends LocalFS {
           if (err) {
             cb(err);
           } else {
-            const versions = items
+            const localVersions = items
               .filter(item => item.endsWith('.tgz'))
               .map(item => item.substring(basename(name).length + 1, item.length - 4));
             const allVersions = Object.keys(data.versions);
             for (const version of allVersions) {
-              if (!versions.includes(version)) {
+              if (!localVersions.includes(version)) {
                 delete data.versions[version];
               }
             }
-            data['dist-tags'].latest = versions.sort((a, b) => cmp(b, a))[0];
+            data['dist-tags'].latest = Object.keys(data.versions).sort((a, b) => cmp(b, a))[0];
             cb(null, data);
           }
         });
