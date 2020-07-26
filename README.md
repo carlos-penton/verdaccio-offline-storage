@@ -3,7 +3,7 @@
 📦 [local-storage](https://github.com/verdaccio/monorepo/tree/master/plugins/local-storage) plugin
 **BUT** with locally available packages as first class citizens. 
 
-> **tl;dr:** Makes Verdaccio's package cache actually works when offline. 
+> **tl;dr:** Makes Verdaccio's package cache actually work when going offline. 
 
 This storage plugin provides only the packages versions stored in a `local-storage` storage. This
 means that if you are in an offline environment (no access to `registry.npmjs.org` or any other 
@@ -26,7 +26,8 @@ means that if you are in an offline environment (no access to `registry.npmjs.or
 - [local-storage](https://github.com/verdaccio/monorepo/tree/master/plugins/local-storage)
   compatible, meaning you can use the default storage without breaking it.
 - No lockfile required to install _again_ the same modules, meaning all the dependencies will be
-  resolved _again_ if they were cached in the past.
+  resolved _again_ if they were cached in the past. If the registry worked when online, then it must
+  work later when offline for **the same dependencies requirements**.
 - `yarn add` or `npm install` **just works**! No more errors due to missing versions.
 
 
