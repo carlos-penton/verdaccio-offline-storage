@@ -27,20 +27,69 @@ export default class OfflinePackageStorage extends LocalFS {
       if (err) {
         cb(err);
       } else {
+        this.logger.debug(
+          {
+            packageName: name,
+          },
+          '[verdaccio-offline-storage/readPackage] discovering local versions for package: @{packageName}'
+        );
         readdir(this.path, (err, items) => {
           if (err) {
+            this.logger.trace(
+              {
+                err,
+                packageName: name,
+              },
+              '[verdaccio-offline-storage/readPackage/readdir] error discovering package "@{packageName}" files: @{err}'
+            );
             cb(err);
           } else {
             const localVersions = items
               .filter(item => item.endsWith('.tgz'))
               .map(item => item.substring(basename(name).length + 1, item.length - 4));
+            this.logger.trace(
+              {
+                packageName: name,
+                count: localVersions.length,
+              },
+              '[local-storage/readPackage/readdir] discovered @{count} items for package: @{packageName}'
+            );
             const allVersions = Object.keys(data.versions);
+            const originalVersionCount = allVersions.length;
+            this.logger.trace(
+              {
+                packageName: name,
+                count: originalVersionCount,
+              },
+              '[local-storage/readPackage/readdir] analyzing @{count} declared versions for package: @{packageName}'
+            );
             for (const version of allVersions) {
               if (!localVersions.includes(version)) {
                 delete data.versions[version];
+                this.logger.trace(
+                  {
+                    packageName: name,
+                    version,
+                  },
+                  '[local-storage/readPackage/readdir] removed @{packageName}@@{version}'
+                );
               }
             }
+            this.logger.trace(
+              {
+                packageName: name,
+                count: originalVersionCount - Object.keys(data.versions).length,
+              },
+              '[local-storage/readPackage/readdir] removed @{count} versions for package: @{packageName}'
+            );
             data['dist-tags'].latest = Object.keys(data.versions).sort((a, b) => cmp(b, a))[0];
+            this.logger.trace(
+              {
+                packageName: name,
+                latest: data['dist-tags'].latest,
+              },
+              '[local-storage/readPackage/readdir] set latest version to @{latest} for package: @{packageName}'
+            );
             cb(null, data);
           }
         });

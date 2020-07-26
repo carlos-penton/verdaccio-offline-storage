@@ -29,12 +29,38 @@ export default class OfflineStoragePlugin extends LocalDatabase {
     const packages = [];
     this.search(
       (item, cb) => {
+        this.logger.debug(
+          {
+            packageName: item.name,
+          },
+          '[verdaccio-offline-storage/get/search] discovering local versions for package: @{packageName}'
+        );
         readdir(item.path, (err, items) => {
           if (err) {
+            this.logger.trace(
+              {
+                err,
+                packageName: item.name,
+              },
+              '[verdaccio-offline-storage/get/search/readdir] error discovering package "@{packageName}" files: @{err}'
+            );
             cb(err);
           } else {
             if (items.find(item => item.endsWith('.tgz'))) {
               packages.push(item.name);
+              this.logger.trace(
+                {
+                  packageName: item.name,
+                },
+                '[verdaccio-offline-storage/get/search/readdir] found locally available package: "@{packageName}"'
+              );
+            } else {
+              this.logger.trace(
+                {
+                  packageName: item.name,
+                },
+                '[verdaccio-offline-storage/get/search/readdir] no locally available version found for package: "@{packageName}"'
+              );
             }
             cb();
           }
@@ -43,6 +69,12 @@ export default class OfflineStoragePlugin extends LocalDatabase {
       () => {
         this.data.list = packages;
         callback(null, packages);
+        this.logger.trace(
+          {
+            totalItems: packages.length,
+          },
+          'verdaccio-offline-storage: [get] full list of packages (@{totalItems}) has been fetched'
+        );
       },
       name => !name.startsWith('.') // so `.{sinopia|verdaccio}-db.json` gets ignored
     );

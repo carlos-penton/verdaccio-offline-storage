@@ -11,7 +11,6 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@verdaccio/commons-api": "^9.6.1",
     "@verdaccio/local-storage": "^9.7.2",
     "semver-compare": "^1.0.0"
   },
@@ -35,7 +34,7 @@
     "verdaccio-"
   ],
   "license": "MIT",
-  "repository": "g3ngar/verdaccio-offline-storage",
+  "repository": "https://github.com/g3ngar/verdaccio-offline-storage",
   "author": "g3ngar <gengar@nauta.cu>",
   "scripts": {
     "build": "yarn lint && mkdir -p lib && rm -r lib && babel src/ --out-dir lib",
