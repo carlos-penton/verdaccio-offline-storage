@@ -1,7 +1,7 @@
 {
   "name": "verdaccio-offline-storage",
-  "version": "0.0.1",
-  "description": "Local package cache as first class citizen",
+  "version": "1.0.0",
+  "description": "Local package cache as first class citizen.",
   "main": "lib/plugin.js",
   "module": "src/plugin.js",
   "files": [
@@ -38,8 +38,8 @@
   "repository": "g3ngar/verdaccio-offline-storage",
   "author": "g3ngar <gengar@nauta.cu>",
   "scripts": {
-    "build": "mkdir -p lib && rm -r lib && babel src/ --out-dir lib",
+    "build": "yarn lint && mkdir -p lib && rm -r lib && babel src/ --out-dir lib",
     "lint": "eslint src/",
-    "prepack": "yarn lint && yarn build"
+    "prepack": "yarn build"
   }
 }
