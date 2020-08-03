@@ -52,7 +52,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: localVersions.length,
               },
-              '[local-storage/readPackage/readdir] discovered @{count} items for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] discovered @{count} items for package: @{packageName}'
             );
             const allVersions = Object.keys(data.versions);
             const originalVersionCount = allVersions.length;
@@ -61,7 +61,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: originalVersionCount,
               },
-              '[local-storage/readPackage/readdir] analyzing @{count} declared versions for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] analyzing @{count} declared versions for package: @{packageName}'
             );
             for (const version of allVersions) {
               if (!localVersions.includes(version)) {
@@ -71,7 +71,7 @@ export default class OfflinePackageStorage extends LocalFS {
                     packageName: name,
                     version,
                   },
-                  '[local-storage/readPackage/readdir] removed @{packageName}@@{version}'
+                  '[verdaccio-offline-storage/readPackage/readdir] removed @{packageName}@@{version}'
                 );
               }
             }
@@ -80,7 +80,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: originalVersionCount - Object.keys(data.versions).length,
               },
-              '[local-storage/readPackage/readdir] removed @{count} versions for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] removed @{count} versions for package: @{packageName}'
             );
             data['dist-tags'].latest = Object.keys(data.versions).sort((a, b) => cmp(b, a))[0];
             this.logger.trace(
@@ -88,7 +88,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 latest: data['dist-tags'].latest,
               },
-              '[local-storage/readPackage/readdir] set latest version to @{latest} for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] set latest version to @{latest} for package: @{packageName}'
             );
             cb(null, data);
           }

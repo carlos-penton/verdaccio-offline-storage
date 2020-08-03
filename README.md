@@ -29,6 +29,8 @@ means that if you are in an offline environment (no access to `registry.npmjs.or
   resolved _again_ if they were cached in the past. If the registry worked when online, then it must
   work later when offline for **the same dependencies requirements**.
 - `yarn add` or `npm install` **just works**! No more errors due to missing versions.
+- Lists all the locally available packages on the web UI. Yes, all of them, not only the uploaded
+  ones.
 
 
 ## Usage
@@ -44,7 +46,7 @@ yarn global add verdaccio-offline-storage
 Then edit the `config.yaml` with the following:
 
 ```yaml
-# The plugin will use the `storage` field just just like the default `local-storage` plugin does
+# The plugin will use the `storage` field just like the default `local-storage` plugin does
 storage: /path/to/the/storage/cache/directory/
 
 # Add this and Verdaccio will load the plugin 

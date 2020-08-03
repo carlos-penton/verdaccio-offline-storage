@@ -1,6 +1,6 @@
 {
   "name": "verdaccio-offline-storage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local package cache as first class citizen.",
   "main": "lib/plugin.js",
   "module": "src/plugin.js",
