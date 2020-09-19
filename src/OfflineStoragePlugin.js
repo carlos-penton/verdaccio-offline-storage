@@ -16,7 +16,6 @@ import OfflinePackageStorage from './OfflinePackageStorage';
 export default class OfflineStoragePlugin extends LocalDatabase {
   constructor(config, options) {
     super(config, options.logger);
-    this.offlineMode = config.uplinks === undefined || Object.keys(config.uplinks).length === 0;
   }
 
   /**
@@ -89,6 +88,8 @@ export default class OfflineStoragePlugin extends LocalDatabase {
    * @see https://verdaccio.org/docs/en/plugin-storage#api
    */
   getPackageStorage(packageName) {
-    return new OfflinePackageStorage(join(this.config.storage, packageName), this.logger, this.offlineMode);
+    const offlineMode = this.config.uplinks === undefined || Object.keys(this.config.uplinks).length === 0;
+
+    return new OfflinePackageStorage(join(this.config.storage, packageName), this.logger, offlineMode);
   }
 }
