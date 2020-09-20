@@ -16,6 +16,15 @@ import OfflinePackageStorage from './OfflinePackageStorage';
 export default class OfflineStoragePlugin extends LocalDatabase {
   constructor(config, options) {
     super(config, options.logger);
+    // eslint-disable-next-line no-console
+    if (config.offline) {
+      options.logger.warn({}, 'Offline mode set explicitly in config. All packages will be resolved in offline mode.');
+    } else {
+      options.logger.warn(
+        {},
+        'Offline mode NOT set explicitly in config. Only packages with no `proxy` will be resolved in offline mode.'
+      );
+    }
   }
 
   /**
@@ -88,8 +97,6 @@ export default class OfflineStoragePlugin extends LocalDatabase {
    * @see https://verdaccio.org/docs/en/plugin-storage#api
    */
   getPackageStorage(packageName) {
-    const offlineMode = this.config.uplinks === undefined || Object.keys(this.config.uplinks).length === 0;
-
-    return new OfflinePackageStorage(join(this.config.storage, packageName), this.logger, offlineMode);
+    return new OfflinePackageStorage(join(this.config.storage, packageName), this.logger, this.config);
   }
 }

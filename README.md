@@ -31,8 +31,12 @@ means that if you are in an offline environment (no access to `registry.npmjs.or
 - `yarn add` or `npm install` **just works**! No more errors due to missing versions.
 - Lists all the locally available packages on the web UI. Yes, all of them, not only the uploaded
   ones.
+- Default [local-storage](https://github.com/verdaccio/monorepo/tree/master/plugins/local-storage)
+  behavior when online (see [usage](#usage) section below), **but** resolving locally all packages
+  with no [proxy](https://verdaccio.org/docs/en/packages#blocking-proxying-a-set-of-specific-packages)
+  defined.
 
-
+  
 ## Usage
 
 First off, install the plugin:
@@ -52,6 +56,12 @@ storage: /path/to/the/storage/cache/directory/
 # Add this and Verdaccio will load the plugin 
 store:
   offline-storage:
+
+# Now on, every package with no `proxy` defined will be resolved locally!
+
+# Optionally, if you want to resolve locally EVERY package (like in the v1 version of this plugin)
+# just add this to the config:
+offline: true
 ```
 
 And voilá, enjoy your working offline environment.

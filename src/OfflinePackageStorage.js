@@ -16,9 +16,9 @@ import LocalFS from '@verdaccio/local-storage/lib/local-fs';
  * @see https://github.com/verdaccio/monorepo/tree/master/plugins/local-storage
  */
 export default class OfflinePackageStorage extends LocalFS {
-  constructor(path, logger, offlineMode) {
+  constructor(path, logger, config) {
     super(path, logger);
-    this.offlineMode = offlineMode;
+    this.config = config;
   }
   /**
    * Computes a package's definition that only lists the locally available versions.
@@ -27,15 +27,34 @@ export default class OfflinePackageStorage extends LocalFS {
    * @param cb Callback to invoke with the computed definition.
    */
   readPackage(name, cb) {
+    const packageAccess = this.config.getMatchedPackagesSpec(name);
+    // It's offline if set explicitly in the config or if no proxy is defined for the package
+    const offline = this.config.offline || !packageAccess.proxy || !packageAccess.proxy.length;
+    if (!offline) {
+      this.logger.trace(
+        {
+          packageName: name,
+        },
+        '[verdaccio-offline-storage/readPackage] Resolving package @{packageName} in online mode'
+      );
+      super.readPackage(name, cb);
+      return;
+    }
+    this.logger.trace(
+      {
+        packageName: name,
+      },
+      '[verdaccio-offline-storage/readPackage] Resolving package @{packageName} in offline mode'
+    );
     super.readPackage(name, (err, data) => {
       if (err) {
         cb(err);
       } else {
-        this.logger.debug(
+        this.logger.trace(
           {
             packageName: name,
           },
-          '[verdaccio-offline-storage/readPackage] discovering local versions for package: @{packageName}'
+          '[verdaccio-offline-storage/readPackage] Discovering local versions for package: @{packageName}'
         );
         readdir(this.path, (err, items) => {
           if (err) {
@@ -44,10 +63,10 @@ export default class OfflinePackageStorage extends LocalFS {
                 err,
                 packageName: name,
               },
-              '[verdaccio-offline-storage/readPackage/readdir] error discovering package "@{packageName}" files: @{err}'
+              '[verdaccio-offline-storage/readPackage/readdir] Error discovering package "@{packageName}" files: @{err}'
             );
             cb(err);
-          } else if (this.offlineMode) {
+          } else {
             const localVersions = items
               .filter(item => item.endsWith('.tgz'))
               .map(item => item.substring(basename(name).length + 1, item.length - 4));
@@ -56,7 +75,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: localVersions.length,
               },
-              '[verdaccio-offline-storage/readPackage/readdir] offline mode - discovered @{count} items for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] Discovered @{count} items for package: @{packageName}'
             );
             const allVersions = Object.keys(data.versions);
             const originalVersionCount = allVersions.length;
@@ -65,7 +84,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: originalVersionCount,
               },
-              '[verdaccio-offline-storage/readPackage/readdir] offline mode - analyzing @{count} declared versions for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] Analyzing @{count} declared versions for package: @{packageName}'
             );
             for (const version of allVersions) {
               if (!localVersions.includes(version)) {
@@ -75,7 +94,7 @@ export default class OfflinePackageStorage extends LocalFS {
                     packageName: name,
                     version,
                   },
-                  '[verdaccio-offline-storage/readPackage/readdir] offline mode - removed @{packageName}@@{version}'
+                  '[verdaccio-offline-storage/readPackage/readdir] Removed @{packageName}@@{version}'
                 );
               }
             }
@@ -84,7 +103,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 count: originalVersionCount - Object.keys(data.versions).length,
               },
-              '[verdaccio-offline-storage/readPackage/readdir] offline mode - removed @{count} versions for package: @{packageName}'
+              '[verdaccio-offline-storage/readPackage/readdir] Removed @{count} versions for package: @{packageName}'
             );
             data['dist-tags'].latest = Object.keys(data.versions).sort((a, b) => cmp(b, a))[0];
             this.logger.trace(
@@ -92,15 +111,7 @@ export default class OfflinePackageStorage extends LocalFS {
                 packageName: name,
                 latest: data['dist-tags'].latest,
               },
-              '[verdaccio-offline-storage/readPackage/readdir] offline mode - set latest version to @{latest} for package: @{packageName}'
-            );
-            cb(null, data);
-          } else {
-            this.logger.trace(
-              {
-                packageName: name,
-              },
-              '[verdaccio-offline-storage/readPackage/readdir] online mode - local package @{packageName} found'
+              '[verdaccio-offline-storage/readPackage/readdir] Set latest version to @{latest} for package: @{packageName}'
             );
             cb(null, data);
           }
